@@ -1,1 +1,39 @@
-//sass code
+@import './_variables';
+
+body{
+    font-family: 'Lato' , sans-serif;
+    color : $dark;
+}
+
+.img_logo{
+    height: 80px;
+}
+
+.img_cart{
+    height: 25px;
+}
+
+nav li a{
+    transition: $smooth;
+    &:hover{
+        color: $primary;
+    }
+}
+
+section.hero{
+    background : $secondary;
+}
+
+.card{
+    background: $secondary;
+}
+.add-to-cart{
+    border: 2px solid $primary;
+    color: $primary;
+    transition: $smooth;
+    &:hover{
+        background: $primary;
+        border-color: $pure;
+        color: $pure;
+    }
+}
