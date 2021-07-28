@@ -1,7 +1,6 @@
-<section class="cart card py-16">
+<section class="cart py-16">
     <% if(session.cart) { %>
     <div class="order container mx-auto w-1/2">
-
         <div class="flex items-center border-b border-gray-300 pb-4">
             <img class="h-6" src="/img/shopping-cart.png" alt="cart">
             <h1 class="font-bold ml-4 text-2xl">Order Summary</h1>
@@ -29,20 +28,23 @@
                 <span class="text-lg font-bold">Total Amount : </span>
                 <span class="amount text-2xl font-bold ml-2">₹<%= session.cart.totalPrice %></span>
             </div>
+            <% if(user) { %>
             <div>
-                <form action="" class="mt-12">
-                    <input class = "border border-gray-400 p-2 w-1/2 mb-4" type="text" placeholder="Phone number">
-                    <input class = "border border-gray-400 p-2 w-1/2" type="text" placeholder="Address">
+                <form action="/orders" method="POST" class="mt-12">
+                    <input name="phone" class = "border border-gray-400 p-2 w-1/2 mb-4" type="text" placeholder="Phone number">
+                    <input name="address" class = "border border-gray-400 p-2 w-1/2" type="text" placeholder="Address">
                     <div>
                         <button class="Order-now px-6 py-2 rounded-full text-white font-bold mt-6" type="submit">Place Order</button>
                     </div>
                 </form>
             </div>
-            <!-- <a href="" class="Order-now inline-block cursor-pointer px-6 py-2 rounded-full text-white font-bold mt-6">Login to Continue</a> -->
+            <% } else { %>
+            <a href="/login" class="Order-now inline-block cursor-pointer px-6 py-2 rounded-full text-white font-bold mt-6">Login to Continue</a>
+            <% } %>
         </div>
     </div>
     <% } else { %>
-    <div class="empty-cart py-12">
+    <div class="empty-cart py-12 nocol">
         <div class="container mx-auto text-center">
             <h1 class="text-3xl font-bold mb-2">Cart Empty🤔</h1>
             <p class="text-gray-500 text-lg mt-5">Looks like you haven't decided what to order <br>
