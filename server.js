@@ -18,6 +18,7 @@ const session = require('express-session')
 const flash = require('express-flash')
 const MongoDBStore = require('connect-mongo')
 const passport = require('passport')
+const Emitter = require('events')
 
 //Database connection
 const url = 'mongodb://localhost/foodie';
@@ -32,6 +33,10 @@ connection
     .on('error', function (err) {
       console.log(err);
     });
+
+//Event Emitter 
+const eventEmitter = new Emitter()
+app.set('eventEmitter',eventEmitter)
 
 // Session config
 app.use(session({                                       //session collection is also created in the db
@@ -77,6 +82,25 @@ app.set('view engine', 'ejs')
 
 require('./routes/web')(app)
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Listening on port :  ${PORT}`)
+})
+
+//Socket
+
+const io = require('socket.io')(server)
+io.on('connection' , (socket) =>{
+  console.log(socket.id)
+  socket.on('join',(roomName)=>{
+      console.log(roomName)
+      socket.join(roomName)
+  })
+})
+
+eventEmitter.on('orderUpdated',(data)=>{
+  io.to(`order_${data.id}`).emit('orderUpdated' , data)
+})
+
+eventEmitter.on('orderPlaced',(data)=>{
+  io.to('adminRoom').emit('orderPlaced', data)
 })
