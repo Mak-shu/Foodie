@@ -1893,10 +1893,13 @@ function initAdmin() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var noty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! noty */ "./node_modules/noty/lib/noty.js");
-/* harmony import */ var noty__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(noty__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _admin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./admin */ "./resources/js/admin.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var noty__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! noty */ "./node_modules/noty/lib/noty.js");
+/* harmony import */ var noty__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(noty__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _admin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./admin */ "./resources/js/admin.js");
 //client code
+
 
 
 
@@ -1907,14 +1910,14 @@ function updateCart(food) {
   //to send request to database toadd the selected food to cart we'll use axios library , we sending data so post request
   axios__WEBPACK_IMPORTED_MODULE_0___default().post('/update-cart', food).then(function (res) {
     cartCounter.innerText = res.data.totalQty;
-    new (noty__WEBPACK_IMPORTED_MODULE_1___default())({
+    new (noty__WEBPACK_IMPORTED_MODULE_2___default())({
       type: 'success',
       timeout: 500,
       text: "Item Added To Cart!",
       progressBar: false
     }).show();
   })["catch"](function (err) {
-    new (noty__WEBPACK_IMPORTED_MODULE_1___default())({
+    new (noty__WEBPACK_IMPORTED_MODULE_2___default())({
       type: 'error',
       timeout: 500,
       text: "Something Went Wrong!",
@@ -1938,7 +1941,40 @@ if (alertMsg) {
   }, 1000);
 }
 
-(0,_admin__WEBPACK_IMPORTED_MODULE_2__.initAdmin)();
+(0,_admin__WEBPACK_IMPORTED_MODULE_3__.initAdmin)(); //Delivery Status
+
+var statuses = document.querySelectorAll('.status_line');
+var hiddenInput = document.querySelector('#hiddenInput');
+var order = hiddenInput ? hiddenInput.value : null;
+order = JSON.parse(order);
+var time = document.createElement('small');
+
+function updateStatus(order) {
+  statuses.forEach(function (status) {
+    status.classList.remove('step-completed');
+    status.classList.remove('current');
+  });
+  var stepCompleted = true;
+  statuses.forEach(function (status) {
+    var dataProp = status.dataset.status;
+
+    if (stepCompleted) {
+      status.classList.add('step-completed');
+    }
+
+    if (dataProp === order.status) {
+      stepCompleted = false;
+      time.innerText = moment__WEBPACK_IMPORTED_MODULE_1___default()(order.updatedAt).format('hh:mm A');
+      status.appendChild(time);
+
+      if (status.nextElementSibling) {
+        status.nextElementSibling.classList.add('current');
+      }
+    }
+  });
+}
+
+updateStatus(order);
 
 /***/ }),
 

@@ -1,34 +1,34 @@
 //client code
 import axios from 'axios'
+import moment from 'moment'
 import Noty from 'noty'
 import { initAdmin } from './admin'
 
-let addToCart = document.querySelectorAll('.add-to-cart')  
+let addToCart = document.querySelectorAll('.add-to-cart')
 let cartCounter = document.querySelector('#cartCounter')
 
-function updateCart(food)
-{
+function updateCart(food) {
     //to send request to database toadd the selected food to cart we'll use axios library , we sending data so post request
-    axios.post('/update-cart', food).then(function(res){
+    axios.post('/update-cart', food).then(function (res) {
         cartCounter.innerText = res.data.totalQty
         new Noty({
-            type : 'success',
+            type: 'success',
             timeout: 500,
             text: "Item Added To Cart!",
-            progressBar : false
-          }).show();
+            progressBar: false
+        }).show();
     }).catch(err => {
         new Noty({
-            type : 'error',
+            type: 'error',
             timeout: 500,
             text: "Something Went Wrong!",
-            progressBar : false
-          }).show();
+            progressBar: false
+        }).show();
     })
 }
 
 addToCart.forEach((btn) => {
-    btn.addEventListener('click' , (e) =>{
+    btn.addEventListener('click', (e) => {
         let food = JSON.parse(btn.dataset.food)
         updateCart(food)
     })
@@ -36,11 +36,41 @@ addToCart.forEach((btn) => {
 
 //Remove alert after 1 second
 const alertMsg = document.querySelector('#success-alert')
-if(alertMsg)
-{
+if (alertMsg) {
     setTimeout(() => {
         alertMsg.remove()
-    },1000)
+    }, 1000)
 }
 
 initAdmin()
+
+//Delivery Status
+let statuses = document.querySelectorAll('.status_line')
+let hiddenInput = document.querySelector('#hiddenInput')
+let order = hiddenInput ? hiddenInput.value : null
+order = JSON.parse(order)
+let time = document.createElement('small')
+
+function updateStatus(order) {
+    statuses.forEach((status) => {
+        status.classList.remove('step-completed')
+        status.classList.remove('current')
+    })
+    let stepCompleted = true;
+    statuses.forEach((status) => {
+       let dataProp = status.dataset.status
+       if(stepCompleted) {
+            status.classList.add('step-completed')
+       }
+       if(dataProp === order.status) {
+            stepCompleted = false
+            time.innerText = moment(order.updatedAt).format('hh:mm A')
+            status.appendChild(time)
+           if(status.nextElementSibling) {
+            status.nextElementSibling.classList.add('current')
+           }
+       }
+    })
+}
+
+updateStatus(order);
