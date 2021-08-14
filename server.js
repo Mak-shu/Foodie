@@ -23,7 +23,6 @@ const Emitter = require('events')
 //Database connection
 const url = 'mongodb://localhost/foodie';
 mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: true });
-//mongoose.connect(process.env.MONGO_CONNECTION_URL , { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: true });
 
 const connection = mongoose.connection;
 connection
@@ -44,7 +43,6 @@ app.use(session({                                       //session collection is 
     resave: false,
     saveUninitialized: false,
     store : MongoDBStore.create({
-        // mongoUrl : process.env.MONGO_CONNECTION_URL,
         client: connection.getClient()          
     }),
     cookie: { maxAge: 1000 * 60 * 60 * 24 } //24 hours
@@ -81,6 +79,9 @@ app.set('view engine', 'ejs')
 //using require we are importing web.js files' initRoutes function and as it is a function we call it using () and passing in the app instance and it is by default via reference so the same instance is shared
 
 require('./routes/web')(app)
+app.use((req,res) =>{
+  res.status(404).render('error_404')
+})
 
 const server = app.listen(PORT, () => {
     console.log(`Listening on port :  ${PORT}`)
@@ -90,7 +91,7 @@ const server = app.listen(PORT, () => {
 
 const io = require('socket.io')(server)
 io.on('connection' , (socket) =>{
-  console.log(socket.id)
+  // console.log(socket.id)
   socket.on('join',(roomName)=>{
       console.log(roomName)
       socket.join(roomName)

@@ -1,8 +1,8 @@
-<section class="hero px-4">
+<section class="hero px-4 py-6">
     <div class="container mx-auto flex items-center justify-between">
         <div class="w-1/2">
             <h6 class="text-lg"><em>Are you hungry?</em></h6>
-            <h1 class="text-6xl font-bold">We've Got You !</h1>
+            <h1 class="text-3xl md:text-6xl font-bold">We've Got You!</h1>
             <button class="Order-now py-2 px-6 rounded-full text-white font-bold mt-6">Order Now!</button>
         </div>
         <div class="w-1/2">
@@ -10,12 +10,11 @@
         </div>
     </div>
 </section>
-<section class="menu container mx-auto px-4 py-8">
-    <h1 class="text-xl font-bold mb-8">All Items</h1>
-    <div class="grid gap-x-12 gap-y-16 grid-cols-4">
-
+<section id="menu-scroll" class="menu container mx-auto px-4 py-8">
+    <h1  class="text-xl font-bold mb-8">All Items</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-12 gap-y-16">
         <% food.forEach(function(food){ %>
-            <div class="w-64">
+            <div class="w-full md:w-64">
                 <img class="h-40 mb-4 mx-auto" src="/img/<%= food.image %>" alt="burger">
                 <div class="text-center">
                     <h2 class="mb-4 text-lg"><%= food.name %></h2>

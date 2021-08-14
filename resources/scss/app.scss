@@ -4,15 +4,26 @@
 
 body{
     font-family: 'Lato' , sans-serif;
+    -webkit-font-smoothing: antialiased;
     color : $dark;
 }
 
-.img_logo{
-    height: 80px;
+.error_gif{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }
 
-.img_cart{
-    height: 25px;
+nav li:last-child a {
+    background: $primary;
+    &:hover {
+        background: $primary-hover;
+    }
+}
+
+.img_logo{
+    height: 95px;
 }
 
 nav li a{
@@ -194,4 +205,22 @@ section.status{
     float: right;
     font-size: 14px;
     margin-top: 8px;
+}
+
+@media(max-width: 1070px){
+    .container{
+        max-width: 90%;
+    }
+    table{
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+}
+
+@media(max-width: 768px) {
+    .status-box ul li span:before{
+        font-size: 40px;
+    }   
 }
